@@ -1,0 +1,11 @@
+BootStrap: docker
+From: hurwitzlab/trim_galore:0.6.5
+
+%runscript
+    exec /usr/local/bin/run_trim_galore "$@"
+
+%post
+    # Mount points for TACC directories
+    mkdir /home1
+    mkdir /scratch
+    mkdir /work
