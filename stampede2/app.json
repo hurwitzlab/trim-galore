@@ -19,7 +19,9 @@
     "parallelism": "SERIAL",
     "templatePath": "template.sh",
     "testPath": "test.sh",
-    "modules": [],
+    "modules": [
+        "load tacc-singularity"
+    ],
     "tags": [
         ""
     ],
@@ -28,7 +30,7 @@
     ],
     "inputs": [
         {
-            "id": "out_dir",
+            "id": "OUT_DIR",
             "value": {
                 "default": "",
                 "order": 1,
@@ -48,7 +50,7 @@
                 ]
             },
             "details": {
-                "description": "Out_Dir",
+                "description": "Out Dir",
                 "label": "Output directory",
                 "argument": "--out_dir ",
                 "repeatArgument": false,
@@ -56,7 +58,7 @@
             }
         },
         {
-            "id": "query",
+            "id": "QUERY",
             "value": {
                 "default": "",
                 "order": 2,
@@ -86,7 +88,7 @@
     ],
     "parameters": [
         {
-            "id": "consider_already_trimmed",
+            "id": "CONSIDER_ALREADY_TRIMMED",
             "value": {
                 "default": "",
                 "type": "flag",
@@ -98,14 +100,14 @@
             },
             "details": {
                 "description": "threshold to consider already adapter-trimmed",
-                "label": "Consider_Already_Trimmed",
+                "label": "Consider Already Trimmed",
                 "argument": "--consider_already_trimmed ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "dont_gzip",
+            "id": "DONT_GZIP",
             "value": {
                 "default": "",
                 "type": "flag",
@@ -117,14 +119,14 @@
             },
             "details": {
                 "description": "Do not compress the output file with GZIP",
-                "label": "Dont_Gzip",
+                "label": "Dont Gzip",
                 "argument": "--dont_gzip ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "gzip",
+            "id": "GZIP",
             "value": {
                 "default": "",
                 "type": "flag",
@@ -143,30 +145,11 @@
             }
         },
         {
-            "id": "help",
+            "id": "ILLUMINA",
             "value": {
                 "default": "",
                 "type": "flag",
                 "order": 4,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
-                "description": "Prints help information",
-                "label": "Help",
-                "argument": "--help ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "illumina",
-            "value": {
-                "default": "",
-                "type": "flag",
-                "order": 5,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -181,11 +164,11 @@
             }
         },
         {
-            "id": "keep",
+            "id": "KEEP",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 6,
+                "order": 5,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -200,7 +183,26 @@
             }
         },
         {
-            "id": "length_1",
+            "id": "LENGTH_1",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 6,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Unpaired single-end read length cutoff needed for read 1",
+                "label": "Length 1",
+                "argument": "--length_1 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "LENGTH_2",
             "value": {
                 "default": "",
                 "type": "flag",
@@ -211,38 +213,19 @@
                 "validator": ""
             },
             "details": {
-                "description": "Unpaired single-end read length cutoff needed for read 1",
-                "label": "Length_1",
-                "argument": "--length_1 ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "length_2",
-            "value": {
-                "default": "",
-                "type": "flag",
-                "order": 8,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
                 "description": "Unpaired single-end read length cutoff needed for read 2",
-                "label": "Length_2",
+                "label": "Length 2",
                 "argument": "--length_2 ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "nextera",
+            "id": "NEXTERA",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 9,
+                "order": 8,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -257,11 +240,11 @@
             }
         },
         {
-            "id": "non_directional",
+            "id": "NON_DIRECTIONAL",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 10,
+                "order": 9,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -269,18 +252,18 @@
             },
             "details": {
                 "description": "Non-directional RRBS libraries",
-                "label": "Non_Directional",
+                "label": "Non Directional",
                 "argument": "--non_directional ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "phred64",
+            "id": "PHRED64",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 11,
+                "order": 10,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -295,11 +278,11 @@
             }
         },
         {
-            "id": "rbbs",
+            "id": "RBBS",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 12,
+                "order": 11,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -314,7 +297,26 @@
             }
         },
         {
-            "id": "retain_unpaired",
+            "id": "RETAIN_UNPAIRED",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 12,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Retain unpaired reads",
+                "label": "Retain Unpaired",
+                "argument": "--retain_unpaired ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "SMALL_RNA",
             "value": {
                 "default": "",
                 "type": "flag",
@@ -325,38 +327,19 @@
                 "validator": ""
             },
             "details": {
-                "description": "Retain unpaired reads",
-                "label": "Retain_Unpaired",
-                "argument": "--retain_unpaired ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "small_rna",
-            "value": {
-                "default": "",
-                "type": "flag",
-                "order": 14,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
                 "description": "Illumina Small RNA 3' Adapter",
-                "label": "Small_Rna",
+                "label": "Small Rna",
                 "argument": "--small_rna ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "trim",
+            "id": "TRIM",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 15,
+                "order": 14,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -371,11 +354,11 @@
             }
         },
         {
-            "id": "trim_n",
+            "id": "TRIM_N",
             "value": {
                 "default": "",
                 "type": "flag",
-                "order": 16,
+                "order": 15,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -383,37 +366,18 @@
             },
             "details": {
                 "description": "Remove Ns from either side of the read",
-                "label": "Trim_N",
+                "label": "Trim N",
                 "argument": "--trim_n ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "version",
-            "value": {
-                "default": "",
-                "type": "flag",
-                "order": 17,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
-                "description": "Prints version information",
-                "label": "Version",
-                "argument": "--version ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "adapter",
+            "id": "ADAPTER",
             "value": {
                 "default": "",
                 "type": "string",
-                "order": 18,
+                "order": 16,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -428,11 +392,11 @@
             }
         },
         {
-            "id": "adapter2",
+            "id": "ADAPTER2",
             "value": {
                 "default": "",
                 "type": "string",
-                "order": 19,
+                "order": 17,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -447,11 +411,11 @@
             }
         },
         {
-            "id": "basename",
+            "id": "BASENAME",
             "value": {
                 "default": "",
                 "type": "string",
-                "order": 20,
+                "order": 18,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -466,7 +430,45 @@
             }
         },
         {
-            "id": "clip_r1",
+            "id": "CLIP_R1",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 19,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 5' end of read 1",
+                "label": "Clip R1",
+                "argument": "--clip_r1 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "CLIP_R2",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 20,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 5' end of read 2",
+                "label": "Clip R2",
+                "argument": "--clip_r2 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "ERROR_RATE",
             "value": {
                 "default": "",
                 "type": "number",
@@ -477,57 +479,19 @@
                 "validator": ""
             },
             "details": {
-                "description": "Remove N bp from the 5' end of read 1",
-                "label": "Clip_R1",
-                "argument": "--clip_r1 ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "clip_r2",
-            "value": {
-                "default": "",
-                "type": "number",
-                "order": 22,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
-                "description": "Remove N bp from the 5' end of read 2",
-                "label": "Clip_R2",
-                "argument": "--clip_r2 ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
-            "id": "error_rate",
-            "value": {
-                "default": "",
-                "type": "number",
-                "order": 23,
-                "required": false,
-                "visible": true,
-                "enquote": false,
-                "validator": ""
-            },
-            "details": {
                 "description": "Maximum allowed error rate",
-                "label": "Error_Rate",
+                "label": "Error Rate",
                 "argument": "--error_rate ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "hardtrim3",
+            "id": "HARDTRIM3",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 24,
+                "order": 22,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -542,11 +506,11 @@
             }
         },
         {
-            "id": "hardtrim5",
+            "id": "HARDTRIM5",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 25,
+                "order": 23,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -561,11 +525,11 @@
             }
         },
         {
-            "id": "length",
+            "id": "LENGTH",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 26,
+                "order": 24,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -580,11 +544,11 @@
             }
         },
         {
-            "id": "max_length",
+            "id": "MAX_LENGTH",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 27,
+                "order": 25,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -592,18 +556,18 @@
             },
             "details": {
                 "description": "Maximum length",
-                "label": "Max_Length",
+                "label": "Max Length",
                 "argument": "--max_length ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "max_n",
+            "id": "MAX_N",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 28,
+                "order": 26,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -611,18 +575,18 @@
             },
             "details": {
                 "description": "Maximum allowed Ns before discarding",
-                "label": "Max_N",
+                "label": "Max N",
                 "argument": "--max_n ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "nextseq",
+            "id": "NEXTSEQ",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 29,
+                "order": 27,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -637,11 +601,11 @@
             }
         },
         {
-            "id": "num_concurrent_jobs",
+            "id": "NUM_CONCURRENT_JOBS",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 30,
+                "order": 28,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -649,18 +613,18 @@
             },
             "details": {
                 "description": "Number of concurrent jobs for parallel [default: 8]",
-                "label": "Num_Concurrent_Jobs",
+                "label": "Num Concurrent Jobs",
                 "argument": "--num_concurrent_jobs ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "num_halt",
+            "id": "NUM_HALT",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 31,
+                "order": 29,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -668,18 +632,18 @@
             },
             "details": {
                 "description": "Halt after this many failing jobs [default: 1]",
-                "label": "Num_Halt",
+                "label": "Num Halt",
                 "argument": "--num_halt ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "quality",
+            "id": "QUALITY",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 32,
+                "order": 30,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -694,11 +658,11 @@
             }
         },
         {
-            "id": "stringency",
+            "id": "STRINGENCY",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 33,
+                "order": 31,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -713,11 +677,11 @@
             }
         },
         {
-            "id": "three_prime_clip_r1",
+            "id": "THREE_PRIME_CLIP_R1",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 34,
+                "order": 32,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -725,18 +689,18 @@
             },
             "details": {
                 "description": "Remove N bp from the 3' end of read 1",
-                "label": "Three_Prime_Clip_R1",
+                "label": "Three Prime Clip R1",
                 "argument": "--three_prime_clip_r1 ",
                 "repeatArgument": false,
                 "showArgument": true
             }
         },
         {
-            "id": "three_prime_clip_r2",
+            "id": "THREE_PRIME_CLIP_R2",
             "value": {
                 "default": "",
                 "type": "number",
-                "order": 35,
+                "order": 33,
                 "required": false,
                 "visible": true,
                 "enquote": false,
@@ -744,7 +708,7 @@
             },
             "details": {
                 "description": "Remove N bp from the 3' end of read 2",
-                "label": "Three_Prime_Clip_R2",
+                "label": "Three Prime Clip R2",
                 "argument": "--three_prime_clip_r2 ",
                 "repeatArgument": false,
                 "showArgument": true
