@@ -1,8 +1,8 @@
 {
     "name": "trim-galore",
     "version": "0.6.5",
-    "shortDescription": "trim-galore",
-    "longDescription": "trim-galore",
+    "shortDescription": "Trim Galore",
+    "longDescription": "Trim Galore is a wrapper around Cutadapt and FastQC to consistently apply adapter and quality trimming to FastQ files, with extra functionality for RRBS data.",
     "available": true,
     "checkpointable": false,
     "defaultMemoryPerNode": 32,
@@ -30,38 +30,10 @@
     ],
     "inputs": [
         {
-            "id": "OUT_DIR",
-            "value": {
-                "default": "",
-                "order": 1,
-                "validator": "",
-                "required": true,
-                "visible": true,
-                "enquote": false
-            },
-            "semantics": {
-                "ontology": [
-                    "http://sswapmeet.sswap.info/mime/application/X-bam"
-                ],
-                "minCardinality": 1,
-                "maxCardinality": -1,
-                "fileTypes": [
-                    "raw-0"
-                ]
-            },
-            "details": {
-                "description": "Out Dir",
-                "label": "Output directory",
-                "argument": "--out_dir ",
-                "repeatArgument": false,
-                "showArgument": true
-            }
-        },
-        {
             "id": "QUERY",
             "value": {
                 "default": "",
-                "order": 2,
+                "order": 1,
                 "validator": "",
                 "required": true,
                 "visible": true,
