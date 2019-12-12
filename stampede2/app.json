@@ -1,506 +1,754 @@
-{"available":true,
- "checkpointable":false,
- "defaultMemoryPerNode":32,
- "defaultProcessorsPerNode":16,
- "defaultMaxRunTime":"24:00:00",
- "defaultNodeCount":1,
- "defaultQueue":"normal",
- "deploymentPath":"kyclark/applications/trim-galore-0.4.5/stampede2",
- "deploymentSystem":"data.iplantcollaborative.org",
- "executionSystem":"tacc-stampede2-kyclark",
- "executionType":"HPC",
- "helpURI":"http://biorxiv.org/content/early/2016/04/19/029827",
- "label": "Fizkin All-vs-All",
- "longDescription":"Sequence QC",
- "modules":["tacc-singularity","launcher"],
- "name":"trim-galore",
- "ontology":["http://sswapmeet.sswap.info/agave/apps/Application"],
- "parallelism":"SERIAL",
- "shortDescription":"Pairwise sequence comparison via Jellyfish",
- "tags":["pairwise", "jellyfish", "gbme", "comparison", "imicrobe"],
- "templatePath":"template.sh",
- "testPath":"test.sh",
- "version":"0.4.5",
- "inputs":[
-    {"id":"QUERY",
-     "value":
-        {"default":"",
-         "order":0,
-         "required":false,
-         "validator":"",
-         "visible":true},
-     "semantics":
-        {"ontology":["http://sswapmeet.sswap.info/mime/application/X-bam"],
-         "minCardinality":1,
-         "maxCardinality":-1,
-         "fileTypes":["raw-0"]},
-     "details":
-        {"description":"",
-         "label":"Input file/directory",
-         "argument":"-x ",
-         "repeatArgument":true,
-         "showArgument":true}
-    },
-  ],
-  "parameters": [
-    {
-      "id": "QUALITY",
-      "value": {
-          "type": "string",
-          "default": "20",
-          "order": 1,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Trim low-quality ends from reads in addition to adapter removal. For RRBS samples, quality trimming will be performed first, and adapter trimming is carried in a second round. Other files are quality and adapter trimmed in a single pass. The algorithm is the same as the one used by BWA (Subtract INT from all qualities; compute partial sums from all indices to the end of the sequence; cut sequence at the index at which the sum is minimal).",
-          "label": "Quality",
-          "argument": "-q ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "PHRED33",
-      "value": {
-          "type": "flag",
-          "default": true,
-          "order": 2,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Cutadapt to use ASCII+33 quality scores as Phred scores (Sanger/Illumina 1.9+ encoding) for quality trimming.",
-          "label": "Phred33",
-          "argument": "--phred33 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "PHRED64",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 3,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Cutadapt to use ASCII+64 quality scores as Phred scores (Sanger/Illumina 1.9+ encoding) for quality trimming.",
-          "label": "Phred64",
-          "argument": "--phred64 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "FASTQC",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 3,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Run FastQC in the default mode on the FastQ file once trimming is complete.",
-          "label": "Run FastQC",
-          "argument": "--fastqc ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "ADAPTER",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 4,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Adapter sequence to be trimmed. If not specified explicitly, Trim Galore will try to auto-detect whether the Illumina universal, Nextera transposase or Illumina small RNA adapter sequence was used. Also see '--illumina', '--nextera' and '--small_rna'. If no adapter can be detected within the first 1 million sequences of the first file specified Trim Galore defaults to '--illumina'.",
-          "label": "Adapter",
-          "argument": "-a ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "ADAPTER2",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 5,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Optional adapter sequence to be trimmed off read 2 of paired-end files. This option requires '--paired' to be specified as well. If the libraries to be trimmed are smallRNA then a2 will be set to the Illumina small RNA 5' adapter automatically (GATCGTCGGACT).",
-          "label": "Adapter2",
-          "argument": "-a2 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "ILLUMINA",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 6,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Adapter sequence to be trimmed is the first 13bp of the Illumina universal adapter 'AGATCGGAAGAGC' instead of the default auto-detection of adapter sequence.",
-          "label": "Illumina",
-          "argument": "--illumina ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "NEXTERA",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 7,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Adapter sequence to be trimmed is the first 12bp of the Nextera adapter 'CTGTCTCTTATA' instead of the default auto-detection of adapter sequence.",
-          "label": "Nextera",
-          "argument": "--nextera ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "SMALL_RNA",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 8,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Adapter sequence to be trimmed is the first 12bp of the Illumina Small RNA 3' Adapter 'TGGAATTCTCGG' instead of the default auto-detection of adapter sequence. Selecting to trim smallRNA adapters will also lower the --length value to 18bp. If the smallRNA libraries are paired-end then a2 will be set to the Illumina small RNA 5' adapter automatically (GATCGTCGGACT) unless -a 2 had been defined explicitly.",
-          "label": "Small RNA",
-          "argument": "--small_rna ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "MAX_LENGTH",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 9,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Discard reads that are longer than <INT> bp after trimming. This is only advised for smallRNA sequencing to remove non-small RNA sequences.",
-          "label": "Max length",
-          "argument": "--max_length ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "STRINGENCY",
-      "value": {
-          "type": "number",
-          "default": 1,
-          "order": 10,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Overlap with adapter sequence required to trim a sequence. Defaults to a very stringent setting of 1, i.e. even a single bp of overlapping sequence will be trimmed off from the 3' end of any read.",
-          "label": "Stringency",
-          "argument": "--stringency ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "ERROR_RATE",
-      "value": {
-          "type": "number",
-          "default": 0.1,
-          "order": 11,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Maximum allowed error rate (no. of errors divided by the length of the matching region)",
-          "label": "Error Rate",
-          "argument": "-e ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "GZIP",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 12,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Compress the output file with GZIP. If the input files are GZIP-compressed the output files will automatically be GZIP compressed as well. As of v0.2.8 the compression will take place on the fly.",
-          "label": "Gzip",
-          "argument": "--gzip ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "LENGTH",
-      "value": {
-          "type": "string",
-          "default": 20,
-          "order": 13,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Discard reads that became shorter than length INT because of either quality or adapter trimming. A value of '0' effectively disables this behaviour. Default: 20 bp.  For paired-end files, both reads of a read-pair need to be longer than <INT> bp to be printed out to validated paired-end files (see option --paired).  If only one read became too short there is the possibility of keeping such unpaired single-end reads (see --retain_unpaired). Default pair-cutoff: 20 bp.",
-          "label": "Length",
-          "argument": "--length ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "MAX_N",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 14,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "The total number of Ns (as integer) a read may contain before it will be removed altogether.  In a paired-end setting, either read exceeding this limit will result in the entire pair being removed from the trimmed output files.",
-          "label": "Max Ns",
-          "argument": "--max_n ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "TRIM_N",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 15,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Removes Ns from either side of the read. This option does currently not work in RRBS mode.",
-          "label": "Trim N",
-          "argument": "--trim-n ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "CLIP_R1",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 16,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Trim Galore to remove <int> bp from the 5' end of read 1 (or single-end reads). This may be useful if the qualities were very poor, or if there is some sort of unwanted bias at the 5' end.",
-          "label": "Clip R1",
-          "argument": "--clip_R1 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "CLIP_R2",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 17,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Trim Galore to remove <int> bp from the 5' end of read 2 (paired-end reads only). This may be useful if the qualities were very poor, or if there is some sort of unwanted bias at the 5' end. For paired-end BS-Seq, it is recommended to remove the first few bp because the end-repair reaction may introduce a bias towards low methylation. Please refer to the M-bias plot section in the Bismark User Guide for some examples.",
-          "label": "Clip R2",
-          "argument": "--clip_R2 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "THREE_PRIME_CLIP_R1",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 18,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Trim Galore to remove <int> bp from the 3' end of read 1 (or single-end reads) AFTER adapter/quality trimming has been performed. This may remove some unwanted bias from the 3' end that is not directly related to adapter sequence or basecall quality.",
-          "label": "Three Prime Clip R1",
-          "argument": "--three_prime_clip_R1 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "THREE_PRIME_CLIP_R2",
-      "value": {
-          "type": "string",
-          "default": "",
-          "order": 19,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Instructs Trim Galore to remove <int> bp from the 3' end of read 2 AFTER adapter/quality trimming has been performed. This may remove some unwanted bias from the 3' end that is not directly related to adapter sequence or basecall quality.",
-          "label": "Three Prime Clip R2",
-          "argument": "--three_prime_clip_R2 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "RRBS",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 20,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Specifies that the input file was an MspI digested RRBS sample (recognition site: CCGG). Single-end or Read 1 sequences (paired-end) which were adapter-trimmed will have a further 2 bp removed from their 3' end. Sequences which were merely trimmed because of poor quality will not be shortened further. Read 2 of paired-end libraries will in addition have the first 2 bp removed from the 5' end (by setting '--clip_r2 2'). This is to avoid using artificial methylation calls from the filled-in cytosine positions close to the 3' MspI site in sequenced fragments.  This option is not recommended for users of the NuGEN ovation RRBS System 1-16 kit (see below).",
-          "label": "RRBS",
-          "argument": "--rrbs ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "NON_DIRECTIONAL",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 21,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Selecting this option for non-directional RRBS libraries will screen quality-trimmed sequences for 'CAA' or 'CGA' at the start of the read and, if found, removes the first two basepairs. Like with the option '--rrbs' this avoids using cytosine positions that were filled-in during the end-repair step. '--non_directional' requires '--rrbs' to be specified as well. Note that this option does not set '--clip_r2 2' in paired-end mode.",
-          "label": "Non Directional",
-          "argument": "--non_directional ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "KEEP",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 22,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Keep the quality trimmed intermediate file. Default: off, which means the temporary file is being deleted after adapter trimming. Only has an effect for RRBS samples since other FastQ files are not trimmed for poor qualities separately.",
-          "label": "Keep",
-          "argument": "--keep ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "PAIRED",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 23,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "This option performs length trimming of quality/adapter/RRBS trimmed reads for paired-end files. To pass the validation test, both sequences of a sequence pair are required to have a certain minimum length which is governed by the option --length (see above). If only one read passes this length threshold the other read can be rescued (see option --retain_unpaired). Using this option lets you discard too short read pairs without disturbing the sequence-by-sequence order of FastQ files which is required by many aligners.",
-          "label": "Paired",
-          "argument": "--paired ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "TRIM1",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 24,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "Trims 1 bp off every read from its 3' end. This may be needed for FastQ files that are to be aligned as paired-end data with Bowtie.",
-          "label": "Trim1",
-          "argument": "--trim1 ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "RETAIN_UNPAIRED",
-      "value": {
-          "type": "flag",
-          "default": false,
-          "order": 25,
-          "required": false,
-          "visible": true
-      },
-      "details": {
-          "description": "If only one of the two paired-end reads became too short, the longer read will be written to either '.unpaired_1.fq' or '.unpaired_2.fq' output files. The length cutoff for unpaired single-end reads is governed by the parameters -r1/--length_1 and -r2/--length_2.",
-          "label": "Retain Unpaired",
-          "argument": "--retain_unpaired ",
-          "showArgument": true
-      }
-    },
-    {
-      "id": "length_1",
-      "value": {
-          "type": "number",
-          "default": 35,
-          "order": 26,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Unpaired single-end read length cutoff needed for read 1 to be written to '.unpaired_1.fq' output file. These reads may be mapped in single-end mode.",
-          "label": "Length 1",
-          "argument": "--length_1 ",
-          "showargument": true
-      }
-    },
-    {
-      "id": "length_2",
-      "value": {
-          "type": "number",
-          "default": 35,
-          "order": 26,
-          "required": false,
-          "validator": "",
-          "visible": true
-      },
-      "details": {
-          "description": "Unpaired single-end read length cutoff needed for read 2 to be written to '.unpaired_2.fq' output file. These reads may be mapped in single-end mode.",
-          "label": "Length 2",
-          "argument": "--length_2 ",
-          "showargument": true
-      }
-    }
-  ],
-  "outputs":[]
+{
+    "name": "trim-galore",
+    "version": "0.6.5",
+    "shortDescription": "trim-galore",
+    "longDescription": "trim-galore",
+    "available": true,
+    "checkpointable": false,
+    "defaultMemoryPerNode": 32,
+    "defaultProcessorsPerNode": 16,
+    "defaultMaxRunTime": "12:00:00",
+    "defaultNodeCount": 1,
+    "defaultQueue": "serial",
+    "deploymentPath": "kyclark/applications/trim-galore-0.6.5/stampede",
+    "deploymentSystem": "data.iplantcollaborative.org",
+    "executionSystem": "tacc-stampede-kyclark",
+    "executionType": "HPC",
+    "helpURI": "",
+    "label": "trim-galore",
+    "parallelism": "SERIAL",
+    "templatePath": "template.sh",
+    "testPath": "test.sh",
+    "modules": [],
+    "tags": [
+        ""
+    ],
+    "ontology": [
+        "http://sswapmeet.sswap.info/agave/apps/Application"
+    ],
+    "inputs": [
+        {
+            "id": "out_dir",
+            "value": {
+                "default": "",
+                "order": 1,
+                "validator": "",
+                "required": true,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Out_Dir",
+                "label": "Output directory",
+                "argument": "--out_dir ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "query",
+            "value": {
+                "default": "",
+                "order": 2,
+                "validator": "",
+                "required": true,
+                "visible": true,
+                "enquote": false
+            },
+            "semantics": {
+                "ontology": [
+                    "http://sswapmeet.sswap.info/mime/application/X-bam"
+                ],
+                "minCardinality": 1,
+                "maxCardinality": -1,
+                "fileTypes": [
+                    "raw-0"
+                ]
+            },
+            "details": {
+                "description": "Query",
+                "label": "File input or directory",
+                "argument": "--query ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        }
+    ],
+    "parameters": [
+        {
+            "id": "consider_already_trimmed",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 1,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "threshold to consider already adapter-trimmed",
+                "label": "Consider_Already_Trimmed",
+                "argument": "--consider_already_trimmed ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "dont_gzip",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 2,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Do not compress the output file with GZIP",
+                "label": "Dont_Gzip",
+                "argument": "--dont_gzip ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "gzip",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 3,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Compress the output file with GZIP",
+                "label": "Gzip",
+                "argument": "--gzip ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "help",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 4,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Prints help information",
+                "label": "Help",
+                "argument": "--help ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "illumina",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 5,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Illumina universal adapter",
+                "label": "Illumina",
+                "argument": "--illumina ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "keep",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 6,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Keep the quality trimmed intermediate file",
+                "label": "Keep",
+                "argument": "--keep ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "length_1",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 7,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Unpaired single-end read length cutoff needed for read 1",
+                "label": "Length_1",
+                "argument": "--length_1 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "length_2",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 8,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Unpaired single-end read length cutoff needed for read 2",
+                "label": "Length_2",
+                "argument": "--length_2 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "nextera",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 9,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Nextera adapter",
+                "label": "Nextera",
+                "argument": "--nextera ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "non_directional",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 10,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Non-directional RRBS libraries",
+                "label": "Non_Directional",
+                "argument": "--non_directional ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "phred64",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 11,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "ASCII+64 quality scores as Phred scores",
+                "label": "Phred64",
+                "argument": "--phred64 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "rbbs",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 12,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Input file was an MspI digested RRBS sample",
+                "label": "Rbbs",
+                "argument": "--rbbs ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "retain_unpaired",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 13,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Retain unpaired reads",
+                "label": "Retain_Unpaired",
+                "argument": "--retain_unpaired ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "small_rna",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 14,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Illumina Small RNA 3' Adapter",
+                "label": "Small_Rna",
+                "argument": "--small_rna ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "trim",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 15,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Trims 1 bp off every read from its 3' end",
+                "label": "Trim",
+                "argument": "--trim ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "trim_n",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 16,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove Ns from either side of the read",
+                "label": "Trim_N",
+                "argument": "--trim_n ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "version",
+            "value": {
+                "default": "",
+                "type": "flag",
+                "order": 17,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Prints version information",
+                "label": "Version",
+                "argument": "--version ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "adapter",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 18,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Adapter sequence to be trimmed",
+                "label": "Adapter",
+                "argument": "--adapter ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "adapter2",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 19,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Adapter sequence to be trimmed",
+                "label": "Adapter2",
+                "argument": "--adapter2 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "basename",
+            "value": {
+                "default": "",
+                "type": "string",
+                "order": 20,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Preferred basename",
+                "label": "Basename",
+                "argument": "--basename ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "clip_r1",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 21,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 5' end of read 1",
+                "label": "Clip_R1",
+                "argument": "--clip_r1 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "clip_r2",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 22,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 5' end of read 2",
+                "label": "Clip_R2",
+                "argument": "--clip_r2 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "error_rate",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 23,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Maximum allowed error rate",
+                "label": "Error_Rate",
+                "argument": "--error_rate ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "hardtrim3",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 24,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Hard-trim sequences to N bp at the 3'-end",
+                "label": "Hardtrim3",
+                "argument": "--hardtrim3 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "hardtrim5",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 25,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Hard-trim sequences to N bp at the 5'-end",
+                "label": "Hardtrim5",
+                "argument": "--hardtrim5 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "length",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 26,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum length",
+                "label": "Length",
+                "argument": "--length ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "max_length",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 27,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Maximum length",
+                "label": "Max_Length",
+                "argument": "--max_length ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "max_n",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 28,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Maximum allowed Ns before discarding",
+                "label": "Max_N",
+                "argument": "--max_n ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "nextseq",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 29,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Quality cutoff",
+                "label": "Nextseq",
+                "argument": "--nextseq ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "num_concurrent_jobs",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 30,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Number of concurrent jobs for parallel [default: 8]",
+                "label": "Num_Concurrent_Jobs",
+                "argument": "--num_concurrent_jobs ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "num_halt",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 31,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Halt after this many failing jobs [default: 1]",
+                "label": "Num_Halt",
+                "argument": "--num_halt ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "quality",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 32,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Minimum Phred score",
+                "label": "Quality",
+                "argument": "--quality ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "stringency",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 33,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Overlap with adapter sequence required to trim a sequence",
+                "label": "Stringency",
+                "argument": "--stringency ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "three_prime_clip_r1",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 34,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 3' end of read 1",
+                "label": "Three_Prime_Clip_R1",
+                "argument": "--three_prime_clip_r1 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        },
+        {
+            "id": "three_prime_clip_r2",
+            "value": {
+                "default": "",
+                "type": "number",
+                "order": 35,
+                "required": false,
+                "visible": true,
+                "enquote": false,
+                "validator": ""
+            },
+            "details": {
+                "description": "Remove N bp from the 3' end of read 2",
+                "label": "Three_Prime_Clip_R2",
+                "argument": "--three_prime_clip_r2 ",
+                "repeatArgument": false,
+                "showArgument": true
+            }
+        }
+    ]
 }
