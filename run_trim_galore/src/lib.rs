@@ -275,14 +275,20 @@ pub fn get_args() -> MyResult<Config> {
                 .help("Retain unpaired reads"),
         )
         .arg(
-            Arg::with_name("length_1").long("length_1").help(
-                "Unpaired single-end read length cutoff needed for read 1",
-            ),
+            Arg::with_name("length_1")
+                .long("length_1")
+                .value_name("INT")
+                .help(
+                    "Unpaired single-end read length cutoff needed for read 1",
+                ),
         )
         .arg(
-            Arg::with_name("length_2").long("length_2").help(
-                "Unpaired single-end read length cutoff needed for read 2",
-            ),
+            Arg::with_name("length_2")
+                .long("length_2")
+                .value_name("INT")
+                .help(
+                    "Unpaired single-end read length cutoff needed for read 2",
+                ),
         )
         .get_matches();
 
@@ -308,15 +314,9 @@ pub fn get_args() -> MyResult<Config> {
         .value_of("quality")
         .and_then(|x| x.trim().parse::<u32>().ok());
 
-    let adapter = match matches.value_of("adapter") {
-        Some(a) => Some(a.to_string()),
-        _ => None,
-    };
+    let adapter = matches.value_of("adapter").map(|a| a.to_string());
 
-    let adapter2 = match matches.value_of("adapter2") {
-        Some(a) => Some(a.to_string()),
-        _ => None,
-    };
+    let adapter2 = matches.value_of("adapter2").map(|a| a.to_string());
 
     let max_length = matches
         .value_of("max_length")
@@ -358,9 +358,7 @@ pub fn get_args() -> MyResult<Config> {
         .value_of("nextseq")
         .and_then(|x| x.trim().parse::<u32>().ok());
 
-    let basename = matches
-        .value_of("adapter")
-        .and_then(|a| Some(a.to_string()));
+    let basename = matches.value_of("adapter").map(|a| a.to_string());
 
     let hardtrim5 = matches
         .value_of("hardtrim5")
@@ -611,7 +609,7 @@ fn make_jobs(
 
         let path = Path::new(file);
         let basename = path.file_name().expect("basename");
-        let SplitPath { stem, ext: _ } =
+        let SplitPath { stem, .. } =
             split_filename(basename.to_string_lossy().to_string());
         let out_dir = &config.out_dir.join(&stem);
         if !out_dir.is_dir() {
