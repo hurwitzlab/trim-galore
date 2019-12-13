@@ -623,7 +623,6 @@ fn make_jobs(
         ));
     }
 
-    println!("Jobs {:?}", jobs);
     Ok(jobs)
 }
 
