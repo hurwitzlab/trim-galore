@@ -435,7 +435,6 @@ pub fn run(config: Config) -> MyResult<()> {
     );
 
     let jobs = make_jobs(&config, pairs, singles)?;
-    println!("{:?}", jobs);
 
     run_jobs(
         &jobs,
@@ -605,8 +604,6 @@ fn make_jobs(
     }
 
     for (i, file) in singles.iter().enumerate() {
-        println!("{:3}: Single {}", i + 1, file);
-
         let path = Path::new(file);
         let basename = path.file_name().expect("basename");
         let SplitPath { stem, .. } =
@@ -615,6 +612,8 @@ fn make_jobs(
         if !out_dir.is_dir() {
             DirBuilder::new().recursive(true).create(&out_dir)?;
         }
+
+        println!("{:3}: Single {}", i + 1, basename);
 
         jobs.push(format!(
             "trim_galore --fastqc -o {} {} {}",
