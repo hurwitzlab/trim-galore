@@ -104,7 +104,7 @@ pub fn get_args() -> MyResult<Config> {
                 .short("H")
                 .long("num_halt")
                 .value_name("INT")
-                .default_value("1")
+                .default_value("0")
                 .help("Halt after this many failing jobs"),
         )
         .arg(
@@ -440,7 +440,7 @@ pub fn run(config: Config) -> MyResult<()> {
         &jobs,
         "Running trim_galore",
         config.num_concurrent_jobs.unwrap_or(8),
-        config.num_halt.unwrap_or(1),
+        config.num_halt.unwrap_or(0),
     )?;
 
     println!("Done, see output in \"{}\"", &config.out_dir.display());
@@ -582,7 +582,7 @@ fn make_jobs(
 
     let mut jobs: Vec<String> = vec![];
     for (i, (sample, val)) in pairs.iter().enumerate() {
-        println!("{:3}: {}", i + 1, sample);
+        println!("{:3}: Pair {}", i + 1, sample);
 
         if let (Some(fwd), Some(rev)) = (
             val.get(&ReadDirection::Forward),
@@ -606,8 +606,8 @@ fn make_jobs(
     for (i, file) in singles.iter().enumerate() {
         let path = Path::new(file);
         let basename = path.file_name().expect("basename");
-        let SplitPath { stem, .. } =
-            split_filename(basename.to_string_lossy().to_string());
+        let basename = &basename.to_string_lossy().to_string();
+        let SplitPath { stem, .. } = split_filename(basename.to_string());
         let out_dir = &config.out_dir.join(&stem);
         if !out_dir.is_dir() {
             DirBuilder::new().recursive(true).create(&out_dir)?;
@@ -623,6 +623,7 @@ fn make_jobs(
         ));
     }
 
+    println!("Jobs {:?}", jobs);
     Ok(jobs)
 }
 
@@ -712,8 +713,12 @@ fn classify(
 
     // Push unpaired samples to the singles
     for key in bad {
+        if let Some(pair) = pairs.get(&key) {
+            for val in pair.values() {
+                singles.push(val.to_string());
+            }
+        }
         pairs.remove(&key);
-        singles.push(key);
     }
 
     Ok((pairs, singles))
